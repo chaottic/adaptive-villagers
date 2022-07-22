@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.chaottic",
+    "id": "adaptive_villagers",
+    "version": "1.0-SNAPSHOT",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": "com.chaottic.adaptive.villagers.common.AdaptiveVillagers"
+    }
+  },
+  "mixin": "adaptive_villagers.mixin.json"
+}
