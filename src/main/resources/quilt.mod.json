@@ -6,7 +6,8 @@
     "version": "1.0-SNAPSHOT",
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
-      "init": "com.chaottic.adaptive.villagers.common.AdaptiveVillagers"
+      "init": "com.chaottic.adaptive.villagers.common.AdaptiveVillagers",
+      "client_init": "com.chaottic.adaptive.villagers.client.AdaptiveVillagersClient"
     }
   },
   "mixin": "adaptive_villagers.mixin.json"

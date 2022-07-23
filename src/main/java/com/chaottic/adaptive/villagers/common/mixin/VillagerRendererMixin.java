@@ -17,8 +17,9 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(VillagerRenderer.class)
 public abstract class VillagerRendererMixin extends MobRenderer<Villager, VillagerModel<Villager>> {
 
-    private VillagerRendererMixin(EntityRendererProvider.Context context, VillagerModel<Villager> entityModel, float f) {
-        super(context, entityModel, f);
+    private VillagerRendererMixin() {
+        //noinspection ConstantConditions
+        super(null, null, 0.0F);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
