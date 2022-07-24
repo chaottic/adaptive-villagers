@@ -12,6 +12,10 @@ repositories {
     maven("https://www.cursemaven.com")
 }
 
+loom {
+    accessWidenerPath.set(File("src/main/resources/adaptive_villagers.aw"))
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
