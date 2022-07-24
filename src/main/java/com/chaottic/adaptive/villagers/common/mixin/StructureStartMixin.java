@@ -1,8 +1,10 @@
 package com.chaottic.adaptive.villagers.common.mixin;
 
-import com.chaottic.adaptive.villagers.common.level.gen.structure.AdaptiveJigsawStructure;
-import com.chaottic.adaptive.villagers.common.level.gen.structure.AdaptiveVillagersStructureData;
-import com.chaottic.adaptive.villagers.common.level.gen.structure.AdaptiveVillagersStructureStartData;
+import com.chaottic.adaptive.villagers.common.structure.AdaptiveVillagersJigsawStructure;
+import com.chaottic.adaptive.villagers.common.structure.AdaptiveVillagersStructureSerializable;
+import com.chaottic.adaptive.villagers.common.structure.AdaptiveVillagersStructureStartData;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -10,6 +12,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,56 +27,46 @@ public class StructureStartMixin implements AdaptiveVillagersStructureStartData 
     @Shadow
     @Final
     private Structure structure;
+
+    @Getter
+    @Setter
     private int civilizationLevel;
 
-    private boolean isTicking;
-    private boolean isAdaptiveVillagersStructureStart;
+    private boolean canTick;
 
+    @Setter
+    private boolean fromAdaptiveVillagers;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void StructureStart(Structure structure, ChunkPos chunkPos, int i, PiecesContainer piecesContainer, CallbackInfo ci) {
-        this.isTicking = structure instanceof AdaptiveJigsawStructure;
-        this.isAdaptiveVillagersStructureStart = structure instanceof AdaptiveJigsawStructure;
-    }
+    private void init(Structure structure, ChunkPos chunkPos, int i, PiecesContainer piecesContainer, CallbackInfo ci) {
+        fromAdaptiveVillagers = structure instanceof AdaptiveVillagersJigsawStructure;
 
-    @Override
-    public int getCivilizationLevel() {
-        return this.civilizationLevel;
-    }
-
-    @Override
-    public void setCivilizationLevel(int value) {
-        this.civilizationLevel = value;
-    }
-
-    @Override
-    public boolean isAdaptiveVillagersStructureStart() {
-        return this.isAdaptiveVillagersStructureStart;
-    }
-
-    @Override
-    public void setAdaptiveVillagersStructureStart(boolean value) {
-
-    }
-
-    @Override
-    public boolean isTicking() {
-        return this.isTicking;
-    }
-
-    @Override
-    public void setTicking(boolean value) {
+        canTick = fromAdaptiveVillagers;
     }
 
     @Inject(method = "createTag", at = @At("RETURN"))
-    private void addStructureData(StructurePieceSerializationContext structurePieceSerializationContext, ChunkPos chunkPos, CallbackInfoReturnable<CompoundTag> cir) {
-        if (structure instanceof AdaptiveVillagersStructureData adaptiveVillagersStructureData) {
-            adaptiveVillagersStructureData.saveCivilizationData((StructureStart) (Object) this, cir.getReturnValue());
+    private void createTag(StructurePieceSerializationContext structurePieceSerializationContext, ChunkPos chunkPos, CallbackInfoReturnable<CompoundTag> cir) {
+        if (structure instanceof AdaptiveVillagersStructureSerializable serializable) {
+            serializable.saveCivilizationData((StructureStart) (Object) this, cir.getReturnValue());
         }
     }
 
     @Override
-    public void tick(ServerLevel serverLevel) {
+    public void tick(@NotNull ServerLevel level) {
+    }
 
+    @Override
+    public boolean getCanTick() {
+        return canTick;
+    }
+
+    @Override
+    public void setCanTick(boolean value) {
+        canTick = value;
+    }
+
+    @Override
+    public boolean getFromAdaptiveVillagers() {
+        return fromAdaptiveVillagers;
     }
 }

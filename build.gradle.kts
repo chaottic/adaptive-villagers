@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.7.10"
     java
     id("org.quiltmc.loom") version "0.12-SNAPSHOT"
+    id("io.freefair.lombok") version "6.5.0.3"
 }
 
 group = "com.chaottic"

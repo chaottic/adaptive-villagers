@@ -1,7 +1,7 @@
 package com.chaottic.adaptive.villagers.common.mixin;
 
-import com.chaottic.adaptive.villagers.common.level.gen.structure.StructureTickable;
-import com.chaottic.adaptive.villagers.common.level.gen.structure.StructureTickablesAccess;
+import com.chaottic.adaptive.villagers.common.structure.TickableStructure;
+import com.chaottic.adaptive.villagers.common.structure.TickableStructureAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -28,21 +28,18 @@ public abstract class ChunkAccessMixin {
     @Final
     protected LevelHeightAccessor levelHeightAccessor;
 
-
     @Shadow public abstract ChunkStatus getStatus();
 
     @Inject(method = "setAllStarts", at = @At("RETURN"))
-    private void addStructureTracking(Map<Structure, StructureStart> map, CallbackInfo ci) {
-        if (this.getStatus() == ChunkStatus.FULL) {
-            if (this.levelHeightAccessor instanceof ServerLevel serverLevel) {
-                this.structureStarts.forEach((structure, structureStart) -> {
-                    if (((Object) structureStart) instanceof StructureTickable structureTickable) {
-                        if (structureTickable.isTicking()) {
-                            ((StructureTickablesAccess) serverLevel).getToTick().add(structureTickable);
-                        }
+    private void setAllStarts(Map<Structure, StructureStart> map, CallbackInfo ci) {
+        if (getStatus() == ChunkStatus.FULL && levelHeightAccessor instanceof ServerLevel level) {
+            structureStarts.forEach((structure, structureStart) -> {
+                if (((Object) structureStart) instanceof TickableStructure tickable) {
+                    if (tickable.getCanTick()) {
+                        ((TickableStructureAccess) level).getToTick().add(tickable);
                     }
-                });
-            }
+                }
+            });
         }
     }
 }
