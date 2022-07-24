@@ -9,6 +9,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://www.cursemaven.com")
 }
 
 dependencies {
@@ -23,6 +24,9 @@ dependencies {
 
     modImplementation("org.quiltmc:quilt-loader:0.17.1-beta.7-SNAPSHOT")
     modImplementation("org.quiltmc.quilt-kotlin-libraries:quilt-kotlin-libraries:0.1.0-SNAPSHOT")
+
+    modImplementation("curse.maven:lazydfu-433518:3821870")
+    modImplementation("curse.maven:starlight-521783:3835973")
 }
 
 tasks.getByName<Test>("test") {

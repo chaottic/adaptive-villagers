@@ -3,7 +3,9 @@
   "minVersion": "0.0.8",
   "package": "com.chaottic.adaptive.villagers.common.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "com.chaottic.adaptive.villagers.common.mixin.AdaptiveVillagersMixinPlugin",
   "mixins": [
+    "dev.MixinMinecraftServer",
     "VillagerMixin"
   ],
   "client": [
